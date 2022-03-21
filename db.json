@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "bawa",
+      "email": "test@test.com",
+      "phone": "6787656764",
+      "address": "USA"
+    },
+    {
+      "name": "sweetu",
+      "email": "sweetu@gmail.com",
+      "phone": "9897654752",
+      "address": "noida, delhi",
+      "id": 2
+    }
+  ]
+}
