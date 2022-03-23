@@ -1,6 +1,7 @@
 import {
   MDBBtn,
   MDBIcon,
+  MDBSpinner,
   MDBTable,
   MDBTableBody,
   MDBTableHead,
@@ -9,23 +10,44 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { loadUsersStart } from "../redux/actions";
+import { toast } from "react-toastify";
+import { deleteUsersStart, loadUsersStart } from "../redux/actions";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.usersState);
+  const { users, loading, error } = useSelector((state) => state.usersState);
 
   useEffect(() => {
     dispatch(loadUsersStart());
   }, []);
 
-  const handleDelete = (id) => {};
+  useEffect(() => error && toast.error(error), [error]);
 
-  return (
+  if (loading) {
+    return (
+      <MDBSpinner style={{ marginTop: "150px" }} role="status">
+        <span className="visually-hidden">Loading...</span>
+      </MDBSpinner>
+    );
+  }
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure that you wanted to delete that user")) {
+      dispatch(deleteUsersStart(id));
+      toast.success("User deleted sucessfully");
+    }
+  };
+
+  return loading ? (
+    <MDBSpinner style={{ marginTop: "150px" }} role="status">
+      <span className="visually-hidden">Loading...</span>
+    </MDBSpinner>
+  ) : (
     <div className="container" style={{ marginTop: "150px" }}>
       <MDBTable>
         <MDBTableHead dark>
           <tr>
+            <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Phone</th>
@@ -37,6 +59,7 @@ const Home = () => {
           users.map((item) => (
             <MDBTableBody key={item.id}>
               <tr>
+                <td>{item.id}</td>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
